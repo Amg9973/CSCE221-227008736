@@ -29,9 +29,23 @@ Node* push(Node* head, int new_data) {
     *       linked list should be 4->3->2->1->NULL and head should
     *       point to 4.
    */
-
-   // Your implementation here
-
+	
+	
+	Node* newNode = new Node;
+	newNode->data = new_data;
+	if (head != NULL){
+		Node* oldHead = new Node;
+		oldHead->data = head->data;
+		oldHead->next = head->next;
+		//cout << "Data in old head = " << oldHead->data << endl;
+		newNode->next = oldHead;
+	}
+	else{
+		newNode->next = NULL;
+	}
+	//cout << "Made next head" << endl;
+	//cout << "New node created.... data = " << newNode->data << endl;
+	return newNode;
 }
 
 void print(Node* head) { 
@@ -44,8 +58,12 @@ void print(Node* head) {
     * E.g.  Print linked list like this: 4->3->2->1->NULL
    */
 
-   // Your implementation here
-
+	Node* current = head;
+	while (current != NULL){
+		cout << current->data << "->";
+		current = current->next;
+	}
+	cout << "NULL" << endl;
 }
 
 
@@ -64,8 +82,10 @@ bool isEmpty(Node* head) {
     * returns: bool i.e. If empty return true else return false
    */
 
-   // Your implementation here
-
+   if (head == NULL){
+	   return true;
+   }
+   return false;
 }
 
 int size(Node* head) {
@@ -76,8 +96,14 @@ int size(Node* head) {
     * returns: size of stack. If empty, return 0
    */
 
-   // Your implementation here
-
+	int count = 0;
+	Node* current = head;
+	while (current != NULL){
+		count += 1;
+		//cout << "Counted 1, head != NULL" << endl;
+		current = current->next;
+	}  
+	return count;
 }
 
 int top(Node* head) {
@@ -90,7 +116,7 @@ int top(Node* head) {
     * E.g.  If stack was 3->2->1->NULL then top should return 3
    */
 
-   // Your implementation here
+   return (head->data);
 
 }
 
@@ -106,8 +132,8 @@ Node* pop(Node* head) {
     *       be 3->2->1->NULL with head pointing to 4
    */
 
-   // Your implementation here
-
+	head = head->next;
+	return head;
 }
 
 
@@ -122,9 +148,11 @@ Node* middle_element(Node* head) {
     * E.g. For 4->3->2->1->NULL, return node with value 2. (Even size)
     *      For 5->4->3->2->1->NULL, return node with value 3 (Odd size)
    */
-
-   // Your implementation here
-
+	Node* current = head;
+	for (int i = 0; i < (size(head) / 2); i++){
+		current = current->next;
+	}
+	return current;
 }
 
 /*
@@ -139,7 +167,12 @@ Node* remove_middle_element(Node* head, Node* middle_node) {
     * E.g. For 5->4->3->2->1->NULL, after this operation the
     *      linked list will become 5->4->2->1->NULL
    */
-
-   // Your implementation here
+	Node* current = head;
+	for (int i = 0; i < (size(head) / 2) - 1; i++){
+		current = current->next;
+	}
+	current->next = current->next->next;
+	return head;
+   
 
 }
