@@ -32,15 +32,17 @@ int main()
   while(count < tableSize && !fail)
   {
     x= rand()%tableSize;// value to insert
-	quadInc=insertQuad(x,linear);
+	//cout << "x = " << x << endl;
+	quadInc=insertQuad(x,quad);
 	if (quadInc < 0)
 		fail = true;
 	else
 	{
 	 quadCollides += quadInc;
 	 linCollides+=insertLinear(x,linear);
-	 dubCollides+=insertDuble(x,doubleHash, duble);
+	 dubCollides+=insertDuble(x, (rand()%tableSize), duble);
 	}
+	//cout << "Count = " << count << endl;
 	count++;
   }
   cout<<"Num linear collides "<<linCollides<<endl;
@@ -51,18 +53,65 @@ int main()
 
 int insertLinear(int x, vector<int> & linear)
 {
-  // Remove below line after your implementaion
-  return 0;
+  bool inserted = false;
+  int collisions = 0;
+  int insertPos = x % linear.size();
+  while (!inserted){
+	if (linear[insertPos] == -1){
+		linear[insertPos] = x;
+		inserted = true;
+	}
+	else{
+		collisions += 1;
+		//cout << "collision" << endl;
+		insertPos = (insertPos + 1) % linear.size();
+	}
+  }
+  //cout << "inserted " << x << " at " << insertPos << endl;
+  return collisions;
 }
 
 int insertQuad(int x, vector<int> & quad)
 {
-  // Remove below line after your implementaion
-  return 0;
+  bool inserted = false;
+  int collisions = 0;
+  int insertPos = x % quad.size();
+  while (!inserted){
+	if (quad[insertPos] == -1){
+		quad[insertPos] = x;
+		inserted = true;
+	}
+	else{
+		collisions += 1;
+		//cout << "collision" << endl;
+		insertPos = (insertPos + (collisions^2)) % quad.size();
+	}
+  }
+  //cout << "inserted " << x << " at " << insertPos << endl;
+  return collisions;
 }
 
 int insertDuble(int x, int dubHash, vector<int> & duble)
 {
-  // Remove below line after your implementaion
-  return 0;
+  //bool inserted = false;
+  int collisions = 0;
+  int insertPos = (x + collisions * dubHash)%duble.size();
+  while (collisions < duble.size()){
+	if (duble[insertPos] == -1){
+		duble[insertPos] = x;
+		return collisions;
+		//inserted = true;
+	}
+	else{
+		collisions += 1;
+		//cout << "collision" << endl;
+		//cout << "Trying to insert at " << insertPos << endl;
+		//cout << "But duble[" << insertPos << "] is occupied by " << duble[insertPos] << endl;
+		insertPos = (x + collisions * dubHash) % duble.size();
+		//cout << "dubHash = " << dubHash << endl;
+		//cout << "Trying to insert at " << insertPos << endl;
+	}
+  }
+  //cout << "inserted " << x << " at " << insertPos << endl;
+  return collisions;
 }
