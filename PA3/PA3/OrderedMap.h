@@ -1,5 +1,8 @@
 #ifndef ORDERED_MAP_H
 #define ORDERED_MAP_H
+#include <iostream>
+#include <string>
+#include <sstream>
 
 using namespace std;       
 
@@ -106,8 +109,17 @@ class OrderedMap
      */
     int hashFunction( const Key & key ) {
         
-        // Remove below line after your implementation
-        return 0;
+        string keyStr;
+		ostringstream  oss;
+		oss << key;
+		keyStr = oss.str();
+		int retInt = 0;
+		for (int i = 0; i < key.length(); i++){
+			retInt += (int)keyStr[i];
+		}
+		//cout << "MAP_MAX_SIZE = " << MAP_MAX_SIZE << endl;
+		//cout << "Int returning = " << retInt%MAP_MAX_SIZE << endl;
+        return retInt%MAP_MAX_SIZE;
     }
 
     /** Q 4.2
@@ -120,9 +132,65 @@ class OrderedMap
      */
     void insert( int hash_key, const Key & key, const Value & value, KeyNode* t )
     {
-        // Remove below line after your implementation
-        return;
-    }
+		bool inOrder = false;
+		bool nextNull = false;
+		//cout << "Inserting Key: " << key << " with value: " << value << " with hash_key: " << hash_key << endl;
+        if( t != nullptr ){
+			if (hash_key == t->hash_key){
+				if (t->right != nullptr){ 
+					ValueNode* currentVal = t->right;
+					ValueNode* prevVal = nullptr;
+					while(!inOrder){
+						if (value > currentVal->value && (currentVal->right != nullptr)){
+							prevVal = currentVal;
+							currentVal = currentVal->right;
+						}
+						else if (value < currentVal->value) {
+							inOrder = true;
+						}
+						else{
+							inOrder = true;
+							nextNull = true;
+						}
+					}
+					if (nextNull){
+						//cout << "Next is null" << endl;
+						currentVal->right = new ValueNode(key, value, nullptr);
+					}
+					else{
+						if (prevVal == nullptr){
+							//cout << "Start of new row" << endl;
+							t->right = new ValueNode(key, value, currentVal);
+						}
+						else{
+							//cout << "Has before and after val" << endl;
+							ValueNode* temp = prevVal->right;
+							prevVal->right = new ValueNode(key, value, temp);
+							delete temp;
+						}
+					}
+				}
+				else{
+					//cout << "Starting new row" << endl;
+					t->right = new ValueNode(key, value, nullptr);
+				}
+			}
+			else if ((t->down != nullptr) && hash_key < t->down->hash_key){
+				//cout << "hash key less than existing" << endl;
+				KeyNode* temp = t->down;
+				t->down = new KeyNode(hash_key, nullptr, temp);
+				insert(hash_key, key, value, t->down);				
+			}
+            else if (t->down == nullptr){
+				//cout << "Starting new row 33" << endl;
+				t->down = new KeyNode(hash_key, nullptr, nullptr);
+				insert(hash_key, key, value, t->down);
+			}
+			else{
+				insert(hash_key, key, value, t->down);
+            } 
+        }
+	}
 
 
     /**
