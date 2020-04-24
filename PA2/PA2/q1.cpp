@@ -8,8 +8,11 @@
  */
 void child(int p, const std::vector<int> Parent)
 {
-    // Remove below line after your implementation
-    return;
+    for (int i = 0; i < Parent.size(); i++){
+		if (Parent.at(i) == p){
+			std::cout << i << std::endl;
+		}
+	}
 }
 
 void testChild(const std::vector<int> Parent){

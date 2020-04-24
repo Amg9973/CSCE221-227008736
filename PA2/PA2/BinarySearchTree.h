@@ -2,7 +2,9 @@
 #define BINARY_SEARCH_TREE_H
 
 #include "dsexceptions.h"
+#include "queueADT.h"
 #include <algorithm>
+#include <iostream>
 using namespace std;       
 
 // BinarySearchTree class
@@ -281,8 +283,23 @@ class BinarySearchTree
      */
     void remove_left( const Comparable & x, BinaryNode * & t )
     {
-        // Remove below line after your implementation
-        return;
+        if( t == nullptr )
+            return;   // Item not found; do nothing
+        if( x < t->element )
+            remove_left( x, t->left );
+        else if( t->element < x )
+            remove_left( x, t->right );
+        else if( t->left != nullptr && t->right != nullptr ) // Two children
+        {
+            t->element = findMax( t->left )->element;
+            remove_left( t->element, t->left );
+        }
+        else
+        {
+            BinaryNode *oldNode = t;
+            t = ( t->left != nullptr ) ? t->left : t->right;
+            delete oldNode;
+        }
     }
 
 
@@ -379,8 +396,12 @@ class BinarySearchTree
      */
     void preorder ( BinaryNode *t, ostream & out ) const
     {
-        // Remove below line after your implementation
-        return;
+        if( t != nullptr )
+        {
+            out << t->element << endl;
+            preorder( t->left, out );
+            preorder( t->right, out );
+        }
     }
 
     /**
@@ -390,8 +411,20 @@ class BinarySearchTree
      */
     int max_depth (BinaryNode *t ) const
     {
-        // Remove below line after your implementation
-        return 0;
+		if (t == nullptr){
+			return 0;
+		}
+		else {
+			int max = 1;
+			int left = max_depth( t->left );
+			int right = max_depth( t ->right );
+			if (left > right){
+				return max + left;
+			}
+			else{
+				return max + right;
+			}
+		}
     }
 
     /**
@@ -401,8 +434,20 @@ class BinarySearchTree
      */
     int min_depth (BinaryNode *t ) const
     {
-        // Remove below line after your implementation
-        return 0;
+		if (t == nullptr){
+			return 0;
+		}
+		else {
+			int max = 0;
+			int left = max_depth( t->left );
+			int right = max_depth( t ->right );
+			if (left < right){
+				return max + left;
+			}
+			else{
+				return max + right;
+			}
+		}
     }
 
     /**
@@ -412,8 +457,16 @@ class BinarySearchTree
      */
     int diameter (BinaryNode *t ) const
     {
-        // Remove below line after your implementation
-        return 0;
+        // Max (diameter of left subtree, diameter of right subtree, longest path that passes through the root
+		if (t == nullptr){
+			return 0;
+		}
+		else {
+			int throughRoot = 1 + max_depth( t->left ) + max_depth( t ->right );
+			int leftSub = diameter( t->left );
+			int rightSub = diameter( t->right );
+			return max(throughRoot, max(leftSub, rightSub));
+		}
     }
 
     /**
@@ -426,8 +479,33 @@ class BinarySearchTree
      */
     void levelorder ( BinaryNode *t, ostream & out ) const
     {
-        // Remove below line after your implementation
-        return;
+		/*
+        if (t == nullptr){
+			return;
+		}
+  
+		// Create an empty queue for level order traversal 
+		customQueue<BinaryNode> q; 
+  
+		// Enqueue Root and initialize height 
+		q.push(*t); 
+  
+		while (q.isEmpty() == false) 
+		{ 
+			// Print front of queue and remove it from queue 
+			BinaryNode *node = &(q.pop()); 
+			cout << node->element << " ";  
+  
+			// Enqueue left child 
+			if (node->left != nullptr) 
+				q.push(node->left); 
+  
+			//Enqueue right child 
+			if (node->right != nullptr) 
+				q.push(node->right); 
+		} 
+		*/
+		return;
     }
 
 

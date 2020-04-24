@@ -10,14 +10,27 @@ int main(){
     Tree.insert (1);
     Tree.insert (4);
 
-    Tree.remove(3);
-    Tree.remove_right(3);
-
-//    Tree.insert (6);
-//    Tree.insert (7);
-//    Tree.insert (9);
-//    Tree.insert (8);
-    
+    //Tree.remove(3);
+    Tree.remove_left(3);
+	
+	/*To test my diameter works on a tree with max diameter NOT through the root:
+    Tree.insert (6);
+    Tree.insert (7);
+    Tree.insert (15);
+    Tree.insert (16);
+	Tree.insert (17);
+    Tree.insert (18);
+    Tree.insert (19);
+    Tree.insert (20);
+    Tree.insert (14);
+    Tree.insert (13);
+    Tree.insert (12);
+    Tree.insert (11);    
+    Tree.insert (10);
+    Tree.insert (9);
+    Tree.insert (8);
+	*/
+	
     std::cout << "In-order:" << std::endl; 
     Tree.printTree();
 
@@ -28,14 +41,14 @@ int main(){
     Tree.levelorder();
 
     std::cout << "max depth:" << Tree.max_depth() << std::endl; 
-    std::cout << "max depth:" << Tree.min_depth() << std::endl; 
+    std::cout << "min depth:" << Tree.min_depth() << std::endl; 
     std::cout << "diameter:" << Tree.diameter() << std::endl;
 
     Tree.LCA(5, 4);
 
     BinarySearchTree<int> Tree1;
 
-    int range = 1e4;
+    int range = 100000;
     std::random_device random_device;
     std::mt19937 random_engine(random_device());
     std::uniform_int_distribution<int> distribution(1, range);
@@ -68,7 +81,7 @@ int main(){
     {
         auto const r = distribution(random_engine);
         Tree1.remove(r);
-        Tree1.remove_right(r);
+        Tree1.remove_left(r);
     }
 
 
